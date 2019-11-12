@@ -1,13 +1,22 @@
 use Mix.Config
 
+database_url = System.get_env("DATABASE_URL")
+
 # Configure your database
-config :instagram, Instagram.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "instagram_dev",
-  hostname: "localhost",
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+case database_url do
+  nil ->
+    config :instagram, Instagram.Repo,
+      username: "postgres",
+      password: "postgres",
+      database: "instagram_dev",
+      hostname: "localhost",
+      show_sensitive_data_on_connection_error: true,
+      pool_size: 10
+  url ->
+    config :instagram, Instagram.Repo,
+      url: url,
+      pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+end
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
