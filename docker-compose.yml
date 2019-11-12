@@ -8,7 +8,7 @@ services:
     volumes:
       - .:/work
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/instagram_dev
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/
   db:
     image: postgres
     environment:

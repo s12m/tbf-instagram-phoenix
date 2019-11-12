@@ -14,7 +14,7 @@ case database_url do
       pool_size: 10
   url ->
     config :instagram, Instagram.Repo,
-      url: url,
+      url: url <> "instagram_dev",
       pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 end
 
