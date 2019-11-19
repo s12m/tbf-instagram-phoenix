@@ -3,7 +3,7 @@ defmodule Instagram.Repo.Migrations.AddImageToPosts do
 
   def change do
     alter table(:posts) do
-      add :image, :text
+      add :image, :string
     end
   end
 end

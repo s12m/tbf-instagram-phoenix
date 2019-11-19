@@ -4,6 +4,7 @@ defmodule Instagram.Posts.Post do
 
   schema "posts" do
     field :body, :string
+    field :image, :any, virtual: true
 
     timestamps()
   end
@@ -11,7 +12,7 @@ defmodule Instagram.Posts.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:body])
-    |> validate_required([:body])
+    |> cast(attrs, [:body, :image])
+    |> validate_required([])
   end
 end
