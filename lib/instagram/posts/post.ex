@@ -1,10 +1,11 @@
 defmodule Instagram.Posts.Post do
   use Ecto.Schema
+  use Arc.Ecto.Schema
   import Ecto.Changeset
 
   schema "posts" do
     field :body, :string
-    field :image, :any, virtual: true
+    field :image, Instagram.ImageUploader.Type
 
     timestamps()
   end
@@ -12,7 +13,8 @@ defmodule Instagram.Posts.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:body, :image])
-    |> validate_required([])
+    |> cast(attrs, [:body])
+    |> cast_attachments(attrs, [:image])
+    |> validate_required([:body, :image])
   end
 end

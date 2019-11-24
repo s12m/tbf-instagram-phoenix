@@ -8,7 +8,7 @@
   </li>
   <li>
     <strong>Image:</strong>
-    <%= @post.image %>
+    <img src="<%= Instagram.ImageUploader.url({@post.image, @post})%>">
   </li>
 
 </ul>
