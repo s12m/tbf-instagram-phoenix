@@ -6,10 +6,6 @@ defmodule Instagram.ImageUploader do
 
   @versions [:original]
 
-  def storage_dir(version, {file, scope}) do
-    Application.get_env(:phoenix, :upload_dir)
-  end
-
   # To add a thumbnail version:
   # @versions [:original, :thumb]
 
@@ -34,9 +30,9 @@ defmodule Instagram.ImageUploader do
   # end
 
   # Override the storage directory:
-  # def storage_dir(version, {file, scope}) do
-  #   "uploads/user/avatars/#{scope.id}"
-  # end
+  def storage_dir(_, {_, scope}) do
+    "uploads/images/posts/#{scope.directory}"
+  end
 
   # Provide a default URL if there hasn't been a file uploaded
   # def default_url(version, scope) do
