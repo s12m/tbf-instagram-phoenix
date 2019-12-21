@@ -34,6 +34,8 @@ defmodule InstagramWeb.Router do
 
     get "/login", SessionController, :new
     post "/login", SessionController, :create
+    get "/register", RegistrationController, :new
+    post "/register", RegistrationController, :create
   end
 
   scope "/", InstagramWeb do

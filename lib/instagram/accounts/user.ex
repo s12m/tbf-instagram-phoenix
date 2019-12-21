@@ -15,6 +15,8 @@ defmodule Instagram.Accounts.User do
     user
     |> cast(attrs, [:email, :password])
     |> validate_required([:email, :password])
+    |> unique_constraint(:email)
+    |> validate_confirmation(:password)
     |> put_password_hash()
   end
 

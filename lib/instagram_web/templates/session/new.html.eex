@@ -10,4 +10,6 @@
   <div>
     <%= submit "Login" %>
   </div>
+
+  <%= link "Registration", to: Routes.registration_path(@conn, :new) %>
 <% end %>
