@@ -22,13 +22,7 @@ defmodule InstagramWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", InstagramWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
-    resources "/posts", PostController
-  end
-
+  # Only unauthenticated
   scope "/", InstagramWeb do
     pipe_through [:browser, :ensure_not_auth]
 
@@ -38,10 +32,20 @@ defmodule InstagramWeb.Router do
     post "/register", RegistrationController, :create
   end
 
+  # Only authenticated
   scope "/", InstagramWeb do
     pipe_through [:browser, :ensure_auth]
 
+    resources "/posts", PostController, except: [:show]
+
     get "/logout", SessionController, :destroy
+  end
+
+  scope "/", InstagramWeb do
+    pipe_through :browser
+
+    get "/", PageController, :index
+    resources "/posts", PostController, only: [:show]
   end
 
   # Other scopes may use custom stacks.

@@ -28,6 +28,6 @@ defmodule InstagramWeb.SessionController do
     conn
     |> Guardian.Plug.sign_out()
     |> put_flash(:info, "Logout successfully.")
-    |> redirect(to: Routes.post_path(conn, :index))
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 end
