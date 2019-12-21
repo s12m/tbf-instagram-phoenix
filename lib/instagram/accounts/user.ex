@@ -2,6 +2,8 @@ defmodule Instagram.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @email_regex ~r/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+
   schema "users" do
     field :email, :string
     field :password_hash, :string
@@ -15,8 +17,10 @@ defmodule Instagram.Accounts.User do
     user
     |> cast(attrs, [:email, :password])
     |> validate_required([:email, :password])
-    |> unique_constraint(:email)
+    |> validate_format(:email, @email_regex)
+    |> validate_length(:password, min: 6)
     |> validate_confirmation(:password)
+    |> unique_constraint(:email)
     |> put_password_hash()
   end
 
