@@ -86,3 +86,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure arc
 config :arc, storage: Arc.Storage.Local
+
+# Configure guardian
+config :instagram, Instagram.Guardian,
+  issuer: "instagram",
+  secret_key: "rfXGOnrHqAvN3OdL0MZpE1ByHJD7xsxX4ii9g4Y+wAK5gHcUz0alo7rcycP1ShfF"
