@@ -7,7 +7,7 @@ defmodule InstagramWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug Instagram.Guardian.Pipeline
+    plug InstagramWeb.Guardian.Pipeline
   end
 
   pipeline :ensure_not_auth do

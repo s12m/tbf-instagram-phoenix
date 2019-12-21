@@ -24,7 +24,7 @@ defmodule Instagram.Posts do
   @doc """
   Returns the list of posts created by the user.
   """
-  def list_posts(%User{id: id} = user) do
+  def list_posts(%User{} = user) do
     Repo.all(Post.filter_by_user(Post, user))
   end
 

@@ -1,4 +1,4 @@
-defmodule Instagram.Guardian.ErrorHandler do
+defmodule InstagramWeb.Guardian.ErrorHandler do
   use InstagramWeb, :controller
 
   @behaviour Guardian.Plug.ErrorHandler
@@ -8,6 +8,7 @@ defmodule Instagram.Guardian.ErrorHandler do
     case type do
       :unauthenticated ->
         conn
+        |> put_session(:user_return_to, request_url(conn))
         |> put_flash(:error, "Please login.")
         |> redirect(to: Routes.session_path(conn, :new))
       :already_authenticated ->

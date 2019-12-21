@@ -1,5 +1,6 @@
 defmodule InstagramWeb.PostController do
   use InstagramWeb, :controller
+  import Guardian.Plug
 
   alias Instagram.Repo
   alias Instagram.Posts

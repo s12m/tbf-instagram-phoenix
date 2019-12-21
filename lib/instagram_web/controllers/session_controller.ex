@@ -1,7 +1,7 @@
 defmodule InstagramWeb.SessionController do
   use InstagramWeb, :controller
+  import InstagramWeb.Guardian.Plug
 
-  alias Instagram.Guardian
   alias Instagram.Accounts
   alias Instagram.Accounts.User
 
@@ -13,10 +13,12 @@ defmodule InstagramWeb.SessionController do
   def create(conn, %{"user" => %{"email" => email, "password" => password}}) do
     case Accounts.authenticate_user(email, password) do
       {:ok, user} ->
+        url = get_session(conn, :user_return_to) || Routes.post_path(conn, :index)
         conn
-        |> Guardian.Plug.sign_in(user)
+        |> sign_in(user)
+        |> delete_session(:user_return_to)
         |> put_flash(:info, "Login successfully.")
-        |> redirect(to: Routes.post_path(conn, :index))
+        |> redirect(external: url)
       {:error, :invalid_credentials} ->
         conn
         |> put_flash(:error, "Invalid email or password.") 
@@ -26,7 +28,7 @@ defmodule InstagramWeb.SessionController do
 
   def destroy(conn, _) do
     conn
-    |> Guardian.Plug.sign_out()
+    |> sign_out()
     |> put_flash(:info, "Logout successfully.")
     |> redirect(to: Routes.page_path(conn, :index))
   end

@@ -1,4 +1,4 @@
-defmodule Instagram.Guardian do
+defmodule InstagramWeb.Guardian do
   use Guardian, otp_app: :instagram
 
   def subject_for_token(resource, _) do

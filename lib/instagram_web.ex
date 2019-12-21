@@ -22,7 +22,6 @@ defmodule InstagramWeb do
       use Phoenix.Controller, namespace: InstagramWeb
 
       import Plug.Conn
-      import Guardian.Plug
       import InstagramWeb.Gettext
       alias InstagramWeb.Router.Helpers, as: Routes
     end

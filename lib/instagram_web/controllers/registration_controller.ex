@@ -1,7 +1,7 @@
 defmodule InstagramWeb.RegistrationController do
   use InstagramWeb, :controller
+  import InstagramWeb.Guardian.Plug
 
-  alias Instagram.Guardian
   alias Instagram.Accounts
   alias Instagram.Accounts.User
 
@@ -13,10 +13,12 @@ defmodule InstagramWeb.RegistrationController do
   def create(conn, %{"user" => user_params}) do
     case Accounts.create_user(user_params) do
       {:ok, user} ->
+        url = get_session(conn, :user_return_to) || Routes.post_path(conn, :index)
         conn
-        |> Guardian.Plug.sign_in(user)
+        |> sign_in(user)
+        |> delete_session(:user_return_to)
         |> put_flash(:info, "Registration successfully.")
-        |> redirect(to: Routes.post_path(conn, :index))
+        |> redirect(external: url)
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
