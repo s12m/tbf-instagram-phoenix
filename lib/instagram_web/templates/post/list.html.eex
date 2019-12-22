@@ -1,0 +1,23 @@
+<%= @posts |> Enum.chunk_every(3) |> Enum.map(fn(posts) -> %>
+  <div class="row">
+    <%= posts |> Enum.map(fn(post) -> %>
+      <div class="col-4 p-1">
+        <div class="card">
+          <img src="<%= Instagram.ImageUploader.url({post.image, post})%>" class="card-img-top">
+          <div class="card-body">
+            <p class="card-text"><%= post.body %></p>
+            <small class="d-block">
+              Posted by
+              <%= if post.user do %>
+                you
+              <% else %>
+                <%= post.user.email %>
+              <% end %>
+            </small>
+            <small class="d-block" title="<%= post.inserted_at %>"><%= post.inserted_at %></small>
+          </div>
+        </div>
+      </div>
+    <% end) %>
+  </div>
+<% end) %>

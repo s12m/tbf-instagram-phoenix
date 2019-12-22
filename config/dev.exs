@@ -25,7 +25,15 @@ end
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :instagram, InstagramWeb.Endpoint,
-  http: [port: 4000],
+  http: [
+    port: 4000,
+    protocol_options: [
+      max_header_name_length: 64,
+      max_header_value_length: 40960,
+      max_headers: 100,
+      max_request_line_length: 80960
+    ]
+  ],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
