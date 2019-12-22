@@ -6,6 +6,7 @@ defmodule Instagram.Posts do
   import Ecto.Query, warn: false
   alias Instagram.Repo
   alias Instagram.Posts.Post
+  alias Instagram.Accounts.User
 
   @doc """
   Returns the list of posts.
@@ -16,8 +17,15 @@ defmodule Instagram.Posts do
       [%Post{}, ...]
 
   """
-  def list_posts do
+  def list_posts() do
     Repo.all(Post)
+  end
+
+  @doc """
+  Returns the list of posts created by the user.
+  """
+  def list_posts(%User{} = user) do
+    Repo.all(Post.filter_by_user(Post, user))
   end
 
   @doc """
@@ -35,6 +43,11 @@ defmodule Instagram.Posts do
 
   """
   def get_post!(id), do: Repo.get!(Post, id)
+
+  @doc """
+  Gets a single post created by the user.
+  """
+  def get_post!(id, %User{} = user), do: Repo.get!(Post.filter_by_user(Post, user), id)
 
   @doc """
   Creates a post.
