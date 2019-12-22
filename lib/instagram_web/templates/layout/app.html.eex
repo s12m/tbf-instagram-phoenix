@@ -12,8 +12,12 @@
       <%= link 'Instagram clone with Phoenix Framework', to: Routes.page_path(@conn, :index), class: 'navbar-brand' %>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><%= link 'Sign up', to: Routes.registration_path(@conn, :new), class: 'btn btn-info' %></li>
-          <li class="nav-item"><%= link 'Sign in', to: Routes.session_path(@conn, :new), class: 'nav-link' %></li>
+          <%= if current_user(@conn) do %>
+            <li class="nav-item"><%= link 'Sign out', to: Routes.session_path(@conn, :destroy), method: :delete, class: 'nav-link' %></li>
+          <% else %>
+            <li class="nav-item"><%= link 'Sign up', to: Routes.registration_path(@conn, :new), class: 'btn btn-info' %></li>
+            <li class="nav-item"><%= link 'Sign in', to: Routes.session_path(@conn, :new), class: 'nav-link' %></li> 
+          <% end %>
         </ul>
       </div>
     </nav>
