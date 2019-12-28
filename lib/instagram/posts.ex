@@ -19,6 +19,7 @@ defmodule Instagram.Posts do
   """
   def list_posts() do
     Repo.all(Post)
+    |> Repo.preload(:user)
   end
 
   @doc """
@@ -26,6 +27,7 @@ defmodule Instagram.Posts do
   """
   def list_posts(%User{} = user) do
     Repo.all(Post.filter_by_user(Post, user))
+    |> Repo.preload(:user)
   end
 
   @doc """
