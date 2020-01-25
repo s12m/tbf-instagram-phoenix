@@ -12,7 +12,7 @@ database_url =
     """
 
 config :instagram, Instagram.Repo,
-  # ssl: true,
+  ssl: true,
   url: database_url,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
@@ -24,7 +24,10 @@ secret_key_base =
     """
 
 config :instagram, InstagramWeb.Endpoint,
-  http: [:inet6, port: String.to_integer(System.get_env("PORT") || "4000")],
+  load_from_system_env: true,
+  http: [port: {:system, "PORT"}],
+  url: [scheme: "https", host: "tbf-instagram-phoenix.herokuapp.com", port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
   secret_key_base: secret_key_base
 
 # ## Using releases (Elixir v1.9+)
