@@ -6,9 +6,9 @@ defmodule Instagram.AccountsTest do
   describe "user" do
     alias Instagram.Accounts.User
 
-    @valid_attrs %{email: "some email", password_hash: "some password_hash"}
-    @update_attrs %{email: "some updated email", password_hash: "some updated password_hash"}
-    @invalid_attrs %{email: nil, password_hash: nil}
+    @valid_attrs %{email: "some@example.com", password: "password", password_confirmation: "password"}
+    @update_attrs %{email: "updated@example.com"}
+    @invalid_attrs %{email: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -19,20 +19,31 @@ defmodule Instagram.AccountsTest do
       user
     end
 
+    test "authenticate_user/2 with valid data returns authenticated user" do
+      _user = user_fixture()
+      assert {:ok, user} = Accounts.authenticate_user("some@example.com", "password")
+      assert user.email == "some@example.com"
+    end
+
+    test "authenticate_user/2 with invalid data returns error" do
+      _user = user_fixture()
+      assert {:error, :invalid_credentials} = Accounts.authenticate_user("some@example.com", "incorrect_password")
+    end
+
     test "list_user/0 returns all user" do
-      user = user_fixture()
-      assert Accounts.list_user() == [user]
+      _user = user_fixture()
+      assert [%User{} = user] = Accounts.list_user()
+      assert user.email == "some@example.com"
     end
 
     test "get_user!/1 returns the user with given id" do
       user = user_fixture()
-      assert Accounts.get_user!(user.id) == user
+      assert user = Accounts.get_user!(user.id)
     end
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
-      assert user.email == "some email"
-      assert user.password_hash == "some password_hash"
+      assert user.email == "some@example.com"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -42,14 +53,13 @@ defmodule Instagram.AccountsTest do
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
-      assert user.email == "some updated email"
-      assert user.password_hash == "some updated password_hash"
+      assert user.email == "updated@example.com"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-      assert user == Accounts.get_user!(user.id)
+      assert user = Accounts.get_user!(user.id)
     end
 
     test "delete_user/1 deletes the user" do
