@@ -6,7 +6,7 @@ defmodule Instagram.PostsTest do
   describe "posts" do
     alias Instagram.Posts.Post
 
-    @valid_attrs %{body: "some body"}
+    @valid_attrs %{body: "some body", image: %Plug.Upload{path: "test/support/dummy.png", filename: "dummy.png"}}
     @update_attrs %{body: "some updated body"}
     @invalid_attrs %{body: nil}
 
@@ -14,14 +14,35 @@ defmodule Instagram.PostsTest do
       {:ok, post} =
         attrs
         |> Enum.into(@valid_attrs)
+        |> put_default_user_id()
         |> Posts.create_post()
 
       post
     end
 
+    def user_fixture(email \\ "test@example.com") do
+      {:ok, user} = Instagram.Accounts.create_user(%{
+        email: email,
+        password: "password",
+        password_confirmation: "password"
+      })
+
+      user
+    end
+
+    def put_default_user_id(%{user_id: _} = attrs), do: attrs
+    def put_default_user_id(attrs), do: Map.put(attrs, :user_id, user_fixture().id)
+
     test "list_posts/0 returns all posts" do
-      post = post_fixture()
-      assert Posts.list_posts() == [post]
+      post = post_fixture() |> Repo.preload(:user)
+      other_post = post_fixture(user_id: user_fixture("other@example.com").id) |> Repo.preload(:user)
+      assert Posts.list_posts() == [post, other_post]
+    end
+
+    test "list_posts/1 returns user's posts" do
+      post = post_fixture() |> Repo.preload(:user)
+      _other_post = post_fixture(user_id: user_fixture("other@example.com").id) |> Repo.preload(:user)
+      assert Posts.list_posts(post.user) == [post]
     end
 
     test "get_post!/1 returns the post with given id" do
@@ -29,8 +50,15 @@ defmodule Instagram.PostsTest do
       assert Posts.get_post!(post.id) == post
     end
 
+    test "get_post!/2 returns user's post with given id" do
+      post = post_fixture() |> Repo.preload(:user)
+      other_user = user_fixture("other@example.com")
+      assert Posts.get_post!(post.id, post.user) |> Repo.preload(:user) == post
+      assert_raise Ecto.NoResultsError, fn -> Posts.get_post!(post.id, other_user) end
+    end
+
     test "create_post/1 with valid data creates a post" do
-      assert {:ok, %Post{} = post} = Posts.create_post(@valid_attrs)
+      assert {:ok, %Post{} = post} = Posts.create_post(Map.put(@valid_attrs, :user_id, user_fixture().id))
       assert post.body == "some body"
     end
 
