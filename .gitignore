@@ -19,7 +19,7 @@ erl_crash.dump
 # Also ignore archive artifacts (built via "mix archive.build").
 *.ez
 
-# Ignore package tarball (built via "mix hex.build").
+# Ignore package tarball (built via "mix hex.build"). 
 instagram-*.tar
 
 # If NPM crashes, it generates a log, let's ignore it too.
@@ -33,6 +33,6 @@ npm-debug.log
 # this depending on your deployment strategy.
 /priv/static/
 
-/uploads/images/*
+/uploads/images/posts/*
 
 docker-compose.override.yml
