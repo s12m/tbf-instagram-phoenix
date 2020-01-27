@@ -14,7 +14,7 @@ case database_url do
   url ->
     config :instagram, Instagram.Repo,
       url: url <> "instagram_test",
-      pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+      pool: Ecto.Adapters.SQL.Sandbox
 end
 
 # We don't run a server during test. If one is required,
@@ -25,3 +25,11 @@ config :instagram, InstagramWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Configure arc
+config :arc, storage: Arc.Storage.Local
+
+# Configure guardian
+config :instagram, InstagramWeb.Guardian,
+  issuer: "instagram",
+  secret_key: "test_secret_key"
