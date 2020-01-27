@@ -1,7 +1,6 @@
 defmodule InstagramWeb.PageController do
   use InstagramWeb, :controller
 
-  alias Instagram.Repo
   alias Instagram.Posts
 
   def index(conn, _params) do
