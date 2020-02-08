@@ -1,20 +1,24 @@
-# Instagram
+# 技術書典8 Phoenix版サンプルコード
 
-To start your Phoenix server:
+技術書典8で頒布した書籍「RailsエンジニアのためのElixir/Phoenix」のPhoenix版サンプルコードです。
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+## 必要なもの
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+- Erlang 22.1.5
+- Elixir 1.9.2
+- Node.js 12.13.0
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## セットアップ
 
-## Learn more
+```
+$ mix do deps.get, ecto.setup
+$ npm install --prefix assets/
+```
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+## 起動
+
+```
+$ mix phx.server
+```
+
+http://localhost:4000
