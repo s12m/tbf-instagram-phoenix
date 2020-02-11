@@ -1,5 +1,5 @@
   
-FROM elixir:1.9.2-alpine
+FROM elixir:1.10.1-alpine
 
 ENV LANG C.UTF-8
 ENV TZ=Asia/Tokyo
@@ -16,4 +16,4 @@ RUN apk update && \
     rm -rf /var/cache/apk/* && \
     mix local.hex --force && \
     mix local.rebar --force && \
-    mix archive.install --force hex phx_new 1.4.10
+    mix archive.install --force hex phx_new 1.4.12
