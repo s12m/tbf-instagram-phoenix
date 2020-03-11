@@ -4,9 +4,9 @@
 
 ## 必要なもの
 
-- Erlang 22.1.5
-- Elixir 1.9.2
-- Node.js 12.13.0
+- Erlang 22.2.6
+- Elixir 1.10.1
+- Node.js 12.15.0
 
 ## セットアップ
 
