@@ -57,16 +57,20 @@ defmodule Instagram.Posts do
   ## Examples
 
       iex> create_post(%{field: value})
-      {:ok, %Post{}}
+      {:ok, %{post_with_inage: %Post{}}}
 
       iex> create_post(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+      {:error, :post, %Ecto.Changeset{}, _}
+
+      iex> create_post(%{image: nil})
+      {:error, :post_with_image, %Ecto.Changeset{}, _}
 
   """
   def create_post(attrs \\ %{}) do
-    %Post{}
-    |> Post.changeset(attrs)
-    |> Repo.insert()
+    Ecto.Multi.new
+    |> Ecto.Multi.insert(:post, Post.changeset(%Post{}, attrs))
+    |> Ecto.Multi.update(:post_with_image, &Post.image_changeset(&1.post, attrs))
+    |> Repo.transaction()
   end
 
   @doc """
@@ -82,9 +86,11 @@ defmodule Instagram.Posts do
 
   """
   def update_post(%Post{} = post, attrs) do
-    post
-    |> Post.changeset(attrs)
-    |> Repo.update()
+    changeset = Ecto.Changeset.merge(
+      Post.changeset(post, attrs),
+      Post.image_changeset(post, attrs)
+    )
+    Repo.update(changeset)
   end
 
   @doc """

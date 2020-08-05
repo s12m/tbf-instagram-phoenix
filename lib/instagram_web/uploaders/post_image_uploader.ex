@@ -31,7 +31,7 @@ defmodule Instagram.PostImageUploader do
 
   # Override the storage directory:
   def storage_dir(_version, {_file, scope}) do
-    "uploads/post/images/#{scope.directory}"
+    "uploads/post/images/#{scope.id}"
   end
 
   # Provide a default URL if there hasn't been a file uploaded

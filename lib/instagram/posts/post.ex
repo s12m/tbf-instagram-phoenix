@@ -9,7 +9,6 @@ defmodule Instagram.Posts.Post do
   schema "posts" do
     field :body, :string
     field :image, Instagram.PostImageUploader.Type
-    field :directory, :string
     belongs_to :user, User
 
     timestamps()
@@ -24,17 +23,12 @@ defmodule Instagram.Posts.Post do
   def changeset(post, attrs) do
     post
     |> cast(attrs, [:body, :user_id])
-    |> put_directory()
-    |> cast_attachments(attrs, [:image])
-    |> validate_required([:body, :image, :user_id])
+    |> validate_required([:body, :user_id])
   end
 
-  defp put_directory(changeset) do
-    case Ecto.get_meta(changeset.data, :state) do
-      :built ->
-        put_change(changeset, :directory, Instagram.generate_token)
-      _ ->
-        changeset
-    end
+  def image_changeset(post, attrs) do
+    post
+    |> cast_attachments(attrs, [:image])
+    |> validate_required([:image])
   end
 end

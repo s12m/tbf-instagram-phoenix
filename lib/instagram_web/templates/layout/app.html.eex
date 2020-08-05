@@ -4,12 +4,12 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Instagram clone with Phoenix Framework</title>
+    <title>Instagram clone using Phoenix Framework</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <%= link "Instagram clone with Phoenix Framework", to: Routes.page_path(@conn, :index), class: "navbar-brand" %>
+      <%= link "Instagram clone using Phoenix Framework", to: Routes.page_path(@conn, :index), class: "navbar-brand" %>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
           <%= if current_user(@conn) do %>
