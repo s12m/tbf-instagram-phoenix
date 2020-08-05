@@ -57,7 +57,7 @@ defmodule Instagram.Posts do
   ## Examples
 
       iex> create_post(%{field: value})
-      {:ok, %{post_with_inage: %Post{}}}
+      {:ok, %{post_with_image: %Post{}}}
 
       iex> create_post(%{field: bad_value})
       {:error, :post, %Ecto.Changeset{}, _}

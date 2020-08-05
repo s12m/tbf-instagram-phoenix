@@ -33,7 +33,7 @@ jobs:
             ${{ runner.os }}-build-
       - name: Install dependeicies
         run: |
-          mix do, deps.get, deps.clean --unlock --unused
+          mix do deps.get, deps.clean --unlock --unused
       - name: Run test
         run: |
           mix test

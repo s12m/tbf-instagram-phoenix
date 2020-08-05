@@ -9,9 +9,10 @@ defmodule Instagram.PostsTest do
     @valid_attrs %{body: "some body", image: %Plug.Upload{path: "test/support/dummy.png", filename: "dummy.png"}}
     @update_attrs %{body: "some updated body"}
     @invalid_attrs %{body: nil}
+    @invalid_image_attrs %{body: "some body", image: nil}
 
     def post_fixture(attrs \\ %{}) do
-      {:ok, post} =
+      {:ok, %{post_with_image: post}} =
         attrs
         |> Enum.into(@valid_attrs)
         |> put_default_user_id()
@@ -58,12 +59,17 @@ defmodule Instagram.PostsTest do
     end
 
     test "create_post/1 with valid data creates a post" do
-      assert {:ok, %Post{} = post} = Posts.create_post(Map.put(@valid_attrs, :user_id, user_fixture().id))
+      assert {:ok, %{post_with_image: %Post{} = post}} = Posts.create_post(Map.put(@valid_attrs, :user_id, user_fixture().id))
       assert post.body == "some body"
+      assert post.image
     end
 
     test "create_post/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Posts.create_post(@invalid_attrs)
+      assert {:error, :post, %Ecto.Changeset{}, _} = Posts.create_post(@invalid_attrs)
+    end
+
+    test "create_post/1 with invalid image data returns error changeset" do
+      assert {:error, :post_with_image, %Ecto.Changeset{}, _} = Posts.create_post(Map.put(@invalid_image_attrs, :user_id, user_fixture().id))
     end
 
     test "update_post/2 with valid data updates the post" do
