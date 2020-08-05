@@ -1,8 +1,8 @@
-defmodule Instagram.ImageUploader do
-  use Arc.Definition
+defmodule Instagram.PostImageUploader do
+  use Waffle.Definition
 
-  # Include ecto support (requires package arc_ecto installed):
-  use Arc.Ecto.Definition
+  # Include ecto support (requires package waffle_ecto installed):
+  use Waffle.Ecto.Definition
 
   @versions [:original]
 
@@ -15,9 +15,9 @@ defmodule Instagram.ImageUploader do
   # end
 
   # Whitelist file extensions:
-  def validate({file, _}) do
-    ~w(.jpg .jpeg .gif .png) |> Enum.member?(Path.extname(file.file_name))
-  end
+  # def validate({file, _}) do
+  #   ~w(.jpg .jpeg .gif .png) |> Enum.member?(Path.extname(file.file_name))
+  # end
 
   # Define a thumbnail transformation:
   # def transform(:thumb, _) do
@@ -30,8 +30,8 @@ defmodule Instagram.ImageUploader do
   # end
 
   # Override the storage directory:
-  def storage_dir(_, {_, scope}) do
-    "uploads/images/posts/#{scope.directory}"
+  def storage_dir(_version, {_file, scope}) do
+    "uploads/post/images/#{scope.directory}"
   end
 
   # Provide a default URL if there hasn't been a file uploaded

@@ -1,6 +1,6 @@
 defmodule Instagram.Posts.Post do
   use Ecto.Schema
-  use Arc.Ecto.Schema
+  use Waffle.Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
@@ -8,7 +8,7 @@ defmodule Instagram.Posts.Post do
 
   schema "posts" do
     field :body, :string
-    field :image, Instagram.ImageUploader.Type
+    field :image, Instagram.PostImageUploader.Type
     field :directory, :string
     belongs_to :user, User
 

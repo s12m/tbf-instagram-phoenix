@@ -3,13 +3,15 @@
     <%= posts |> Enum.map(fn(post) -> %>
       <div class="col-4 p-1">
         <div class="card">
-          <img src="<%= Instagram.ImageUploader.url({post.image, post})%>" class="card-img-top">
+          <img src="<%= Instagram.PostImageUploader.url({post.image, post})%>" class="card-img-top">
           <div class="card-body">
             <p class="card-text"><%= post.body %></p>
             <small class="d-block">
               Posted by
               <%= if post.user == Guardian.Plug.current_resource(@conn) do %>
                 you
+                <%= link "Edit", to: Routes.post_path(@conn, :edit, post), class: "text-primary" %>
+                <%= link "Delete", to: Routes.post_path(@conn, :delete, post), class: "text-danger", method: :delete, data: [confirm: "Are you sure?"] %>
               <% else %>
                 <%= post.user.email %>
               <% end %>

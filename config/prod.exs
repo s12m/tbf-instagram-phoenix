@@ -54,8 +54,8 @@ config :logger, level: :info
 # and configuration from environment variables.
 import_config "prod.secret.exs"
 
-# Configure arc
-config :arc, storage: Arc.Storage.Local
+# Configure waffle
+config :waffle, storage: Waffle.Storage.Local
 
 # Configure guardian
 config :instagram, InstagramWeb.Guardian,

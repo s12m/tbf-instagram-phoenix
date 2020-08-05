@@ -9,14 +9,15 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <%= link 'Instagram clone with Phoenix Framework', to: Routes.page_path(@conn, :index), class: 'navbar-brand' %>
+      <%= link "Instagram clone with Phoenix Framework", to: Routes.page_path(@conn, :index), class: "navbar-brand" %>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
           <%= if current_user(@conn) do %>
-            <li class="nav-item"><%= link 'Sign out', to: Routes.session_path(@conn, :destroy), method: :delete, class: 'nav-link' %></li>
+            <li class="nav-item"><%= link "Your posts", to: Routes.post_path(@conn, :index), class: "nav-link" %></li>
+            <li class="nav-item"><%= link "Sign out", to: Routes.session_path(@conn, :destroy), method: :delete, class: "nav-link" %></li>
           <% else %>
-            <li class="nav-item"><%= link 'Sign up', to: Routes.registration_path(@conn, :new), class: 'btn btn-info' %></li>
-            <li class="nav-item"><%= link 'Sign in', to: Routes.session_path(@conn, :new), class: 'nav-link' %></li> 
+            <li class="nav-item"><%= link "Sign up", to: Routes.registration_path(@conn, :new), class: "btn btn-info" %></li>
+            <li class="nav-item"><%= link "Sign in", to: Routes.session_path(@conn, :new), class: "nav-link" %></li> 
           <% end %>
         </ul>
       </div>

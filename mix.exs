@@ -45,8 +45,8 @@ defmodule Instagram.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:guardian, "~> 2.0"},
       {:argon2_elixir, "~> 2.1"},
-      {:arc, "~> 0.11.0"},
-      {:arc_ecto, "~> 0.11.1"}
+      {:waffle, "~> 1.1.1"},
+      {:waffle_ecto, "~> 0.0.9"}
     ]
   end
 
