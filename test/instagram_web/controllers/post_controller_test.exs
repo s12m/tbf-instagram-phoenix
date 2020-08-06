@@ -9,7 +9,7 @@ defmodule InstagramWeb.PostControllerTest do
   @invalid_attrs %{body: nil}
 
   def fixture(:post, user_id \\ user_fixture().id) do
-    {:ok, post} = Posts.create_post(Map.put(@create_attrs, :user_id, user_id))
+    {:ok, %{post_with_image: post}} = Posts.create_post(Map.put(@create_attrs, :user_id, user_id))
     post
   end
 

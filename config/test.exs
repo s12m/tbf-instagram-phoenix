@@ -26,8 +26,8 @@ config :instagram, InstagramWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-# Configure arc
-config :arc, storage: Arc.Storage.Local
+# Configure waffle
+config :waffle, storage: Waffle.Storage.Local
 
 # Configure guardian
 config :instagram, InstagramWeb.Guardian,
