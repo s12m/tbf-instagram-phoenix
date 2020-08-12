@@ -4,7 +4,7 @@ defmodule Instagram.Posts.Post do
   import Ecto.Changeset
   import Ecto.Query, warn: false
 
-  alias Instagram.Accounts.User
+  alias Instagram.Users.User
 
   schema "posts" do
     field :body, :string

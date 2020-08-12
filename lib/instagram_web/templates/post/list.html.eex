@@ -8,7 +8,7 @@
             <p class="card-text"><%= post.body %></p>
             <small class="d-block">
               Posted by
-              <%= if post.user == Guardian.Plug.current_resource(@conn) do %>
+              <%= if post.user == Pow.Plug.current_user(@conn) do %>
                 you
                 <%= link "Edit", to: Routes.post_path(@conn, :edit, post), class: "text-primary" %>
                 <%= link "Delete", to: Routes.post_path(@conn, :delete, post), class: "text-danger", method: :delete, data: [confirm: "Are you sure?"] %>
