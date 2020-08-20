@@ -1,5 +1,6 @@
 defmodule InstagramWeb.Router do
   use InstagramWeb, :router
+  use Pow.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -7,38 +8,28 @@ defmodule InstagramWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug InstagramWeb.Guardian.Pipeline
   end
 
-  pipeline :ensure_not_auth do
-    plug Guardian.Plug.EnsureNotAuthenticated
-  end
-
-  pipeline :ensure_auth do
-    plug Guardian.Plug.EnsureAuthenticated
+  pipeline :protected do
+    plug Pow.Plug.RequireAuthenticated,
+      error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  # Only unauthenticated
-  scope "/", InstagramWeb do
-    pipe_through [:browser, :ensure_not_auth]
+  scope "/" do
+    pipe_through :browser
 
-    get "/login", SessionController, :new
-    post "/login", SessionController, :create
-    get "/register", RegistrationController, :new
-    post "/register", RegistrationController, :create
+    pow_routes()
   end
 
   # Only authenticated
   scope "/", InstagramWeb do
-    pipe_through [:browser, :ensure_auth]
+    pipe_through [:browser, :protected]
 
     resources "/posts", PostController, except: [:show]
-
-    get "/logout", SessionController, :destroy
   end
 
   scope "/", InstagramWeb do

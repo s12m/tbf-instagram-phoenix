@@ -94,8 +94,3 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure waffle
 config :waffle, storage: Waffle.Storage.Local
-
-# Configure guardian
-config :instagram, InstagramWeb.Guardian,
-  issuer: "instagram",
-  secret_key: "rfXGOnrHqAvN3OdL0MZpE1ByHJD7xsxX4ii9g4Y+wAK5gHcUz0alo7rcycP1ShfF"

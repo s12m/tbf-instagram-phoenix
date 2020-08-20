@@ -28,8 +28,3 @@ config :logger, level: :warn
 
 # Configure waffle
 config :waffle, storage: Waffle.Storage.Local
-
-# Configure guardian
-config :instagram, InstagramWeb.Guardian,
-  issuer: "instagram",
-  secret_key: "test_secret_key"

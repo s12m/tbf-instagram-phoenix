@@ -43,6 +43,6 @@ defmodule InstagramWeb.Endpoint do
     store: :cookie,
     key: "_instagram_key",
     signing_salt: "W+FEotUK"
-
+  plug Pow.Plug.Session, otp_app: :instagram
   plug InstagramWeb.Router
 end

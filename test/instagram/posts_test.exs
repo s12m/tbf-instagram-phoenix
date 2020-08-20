@@ -22,11 +22,11 @@ defmodule Instagram.PostsTest do
     end
 
     def user_fixture(email \\ "test@example.com") do
-      {:ok, user} = Instagram.Accounts.create_user(%{
+      {:ok, user} = Pow.Operations.create(%{
         email: email,
         password: "password",
         password_confirmation: "password"
-      })
+      }, otp_app: :instagram)
 
       user
     end

@@ -6,7 +6,7 @@ defmodule Instagram.Posts do
   import Ecto.Query, warn: false
   alias Instagram.Repo
   alias Instagram.Posts.Post
-  alias Instagram.Accounts.User
+  alias Instagram.Users.User
 
   @doc """
   Returns the list of posts.
