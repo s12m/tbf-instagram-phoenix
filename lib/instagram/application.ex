@@ -6,14 +6,17 @@ defmodule Instagram.Application do
   use Application
 
   def start(_type, _args) do
-    # List all child processes to be supervised
     children = [
       # Start the Ecto repository
       Instagram.Repo,
-      # Start the endpoint when the application starts
+      # Start the Telemetry supervisor
+      InstagramWeb.Telemetry,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: Instagram.PubSub},
+      # Start the Endpoint (http/https)
       InstagramWeb.Endpoint
-      # Starts a worker by calling: Instagram.Worker.start_link(arg)
-      # {Instagram.Worker, arg},
+      # Start a worker by calling: Instagram.Worker.start_link(arg)
+      # {Instagram.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -13,9 +13,10 @@ config :instagram,
 # Configures the endpoint
 config :instagram, InstagramWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "ORX4P/3+YjaVg/CDKWA699ajA1GZiEQbzy8ZXCKUl5ql3BFqECpVHCxGy28REyyl",
-  render_errors: [view: InstagramWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Instagram.PubSub, adapter: Phoenix.PubSub.PG2]
+  secret_key_base: "g+FUyJfqlWJwsBWOB1dEGtYj+UO6QyRss8jCAvux/GNw8g2RTLgihl+KsiQfBRiO",
+  render_errors: [view: InstagramWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Instagram.PubSub,
+  live_view: [signing_salt: "yzHi1OZc"]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -25,7 +26,7 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Configure pow
+# Configures pow
 config :instagram, :pow,
   user: Instagram.Users.User,
   repo: Instagram.Repo

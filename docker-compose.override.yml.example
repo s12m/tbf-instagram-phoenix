@@ -1,8 +1,0 @@
-version: '3.2'
-services:
-  web:
-    ports:
-      - 4000:4000
-  db:
-    ports:
-      - 5423:5432

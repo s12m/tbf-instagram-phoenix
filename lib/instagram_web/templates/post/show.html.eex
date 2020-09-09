@@ -3,16 +3,13 @@
 <ul>
 
   <li>
-    <strong>User:</strong>
-    <%= @post.user.email %>
-  </li>
-  <li>
     <strong>Body:</strong>
     <%= @post.body %>
   </li>
+
   <li>
     <strong>Image:</strong>
-    <img src="<%= Instagram.PostImageUploader.url({@post.image, @post})%>">
+    <img src="<%= Instagram.PostImageUploader.url({@post.image, @post}) %>">
   </li>
 
 </ul>
