@@ -20,3 +20,6 @@ config :instagram, InstagramWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Configures waffle
+config :waffle, storage: Waffle.Storage.Local
