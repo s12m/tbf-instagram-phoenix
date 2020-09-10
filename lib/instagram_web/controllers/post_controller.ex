@@ -2,7 +2,6 @@ defmodule InstagramWeb.PostController do
   use InstagramWeb, :controller
   import Pow.Plug
 
-  alias Instagram.Repo
   alias Instagram.Posts
   alias Instagram.Posts.Post
 
@@ -17,7 +16,8 @@ defmodule InstagramWeb.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
-    case Posts.create_post(Map.put(post_params, "user_id", current_user(conn).id)) do
+    post_params = Map.put(post_params, "user_id", current_user(conn).id)
+    case Posts.create_post(post_params) do
       {:ok, %{post_with_image: post}} ->
         conn
         |> put_flash(:info, "Post created successfully.")
@@ -29,21 +29,18 @@ defmodule InstagramWeb.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = 
-      id
-      |> Posts.get_post!()
-      |> Repo.preload(:user)
+    post = Posts.get_post!(id)
     render(conn, "show.html", post: post)
   end
 
   def edit(conn, %{"id" => id}) do
-    post = Posts.get_post!(id, current_user(conn))
+    post = Posts.get_post!(current_user(conn), id)
     changeset = Posts.change_post(post)
     render(conn, "edit.html", post: post, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do
-    post = Posts.get_post!(id, current_user(conn))
+    post = Posts.get_post!(current_user(conn), id)
 
     case Posts.update_post(post, post_params) do
       {:ok, post} ->
@@ -57,7 +54,7 @@ defmodule InstagramWeb.PostController do
   end
 
   def delete(conn, %{"id" => id}) do
-    post = Posts.get_post!(id, current_user(conn))
+    post = Posts.get_post!(current_user(conn), id)
     {:ok, _post} = Posts.delete_post(post)
 
     conn

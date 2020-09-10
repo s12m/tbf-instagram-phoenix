@@ -1,7 +1,6 @@
 <h1>Show Post</h1>
 
 <ul>
-
   <li>
     <strong>User:</strong>
     <%= @post.user.email %>
@@ -14,7 +13,6 @@
     <strong>Image:</strong>
     <img src="<%= Instagram.PostImageUploader.url({@post.image, @post})%>">
   </li>
-
 </ul>
 
 <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span>

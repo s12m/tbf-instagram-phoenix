@@ -3,36 +3,45 @@ defmodule InstagramWeb.PostControllerTest do
 
   alias Instagram.Posts
 
-  @create_attrs %{body: "some body", image: %Plug.Upload{path: "test/support/dummy.png", filename: "dummy.png"}}
+  @create_attrs %{body: "some body", image: %Plug.Upload{path: "test/support/fixtures/dummy.png", filename: "dummy.png"}}
   @update_attrs %{body: "some updated body"}
   @invalid_attrs %{body: nil}
 
-  def fixture(:post, user_id \\ user_fixture().id) do
-    {:ok, %{post_with_image: post}} = Posts.create_post(Map.put(@create_attrs, :user_id, user_id))
+  def fixture(:post) do
+    attrs = Map.put(@create_attrs, :user_id, user_fixture().id)
+    {:ok, %{post_with_image: post}} = Posts.create_post(attrs)
+
     post
+    |> Instagram.Repo.preload(:user)
   end
 
-  def user_fixture(email \\ "some@example.com") do
-    {:ok, user} = Pow.Operations.create(%{
-      email: email, 
-      password: "password", 
-      password_confirmation: "password"
-    }, otp_app: :instagram)
+  def user_fixture(attrs \\ %{email: "test@example.com"}) do
+    {:ok, user} =
+      attrs
+      |> Map.merge(%{password: "password", password_confirmation: "password"})
+      |> Pow.Operations.create(otp_app: :instagram)
+
     user
+  end
+
+  def sign_in(conn, user \\ user_fixture()) do
+    Pow.Plug.assign_current_user(conn, user, otp_app: :instagram)
   end
 
   describe "index" do
     test "lists all posts", %{conn: conn} do
-      conn = 
+      conn =
         conn
-        |> Pow.Plug.assign_current_user(user_fixture(), otp_app: :instagram)
+        |> sign_in()
         |> get(Routes.post_path(conn, :index))
+
       assert html_response(conn, 200) =~ "Your posts"
     end
 
-    test "redirects to login when no login", %{conn: conn} do
-      conn = get(conn, Routes.post_path(conn, :index))
-      assert redirected_to(conn) == Routes.pow_session_path(conn, :new, request_path: Routes.post_path(conn, :index))
+    test "redirects to /session/new when not signed in", %{conn: conn} do
+      path = Routes.post_path(conn, :index)
+      conn = get(conn, path)
+      assert redirected_to(conn) == Routes.pow_session_path(conn, :new, request_path: path)
     end
   end
 
@@ -40,14 +49,16 @@ defmodule InstagramWeb.PostControllerTest do
     test "renders form", %{conn: conn} do
       conn = 
         conn
-        |> Pow.Plug.assign_current_user(user_fixture(), otp_app: :instagram)
+        |> sign_in()
         |> get(Routes.post_path(conn, :new))
+
       assert html_response(conn, 200) =~ "New Post"
     end
 
-    test "redirects to login when no login", %{conn: conn} do
-      conn = get(conn, Routes.post_path(conn, :new))
-      assert redirected_to(conn) == Routes.pow_session_path(conn, :new, request_path: Routes.post_path(conn, :new))
+    test "redirects to /session/new when not signed in", %{conn: conn} do
+      path = Routes.post_path(conn, :new)
+      conn = get(conn, path)
+      assert redirected_to(conn) == Routes.pow_session_path(conn, :new, request_path: path)
     end
   end
 
@@ -55,7 +66,7 @@ defmodule InstagramWeb.PostControllerTest do
     test "redirects to show when data is valid", %{conn: conn} do
       conn = 
         conn
-        |> Pow.Plug.assign_current_user(user_fixture(), otp_app: :instagram)
+        |> sign_in()
         |> post(Routes.post_path(conn, :create), post: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
@@ -68,8 +79,9 @@ defmodule InstagramWeb.PostControllerTest do
     test "renders errors when data is invalid", %{conn: conn} do
       conn = 
         conn
-        |> Pow.Plug.assign_current_user(user_fixture(), otp_app: :instagram)
+        |> sign_in()
         |> post(Routes.post_path(conn, :create), post: @invalid_attrs)
+
       assert html_response(conn, 200) =~ "New Post"
     end
   end
@@ -80,23 +92,16 @@ defmodule InstagramWeb.PostControllerTest do
     test "renders form for editing chosen post", %{conn: conn, post: post} do
       conn = 
         conn
-        |> Pow.Plug.assign_current_user(post.user, otp_app: :instagram)
+        |> sign_in(post.user)
         |> get(Routes.post_path(conn, :edit, post))
+
       assert html_response(conn, 200) =~ "Edit Post"
     end
 
-    test "redirects to login when no login", %{conn: conn, post: post} do
-      conn = get(conn, Routes.post_path(conn, :edit, post))
-      assert redirected_to(conn) == Routes.pow_session_path(conn, :new, request_path: Routes.post_path(conn, :edit, post))
-    end
-
-    test "redirects to login when login with other user", %{conn: conn, post: post} do
-      other_user = user_fixture("other@example.com")
-      assert_error_sent 404, fn ->
-        conn
-        |> Pow.Plug.assign_current_user(other_user, otp_app: :instagram)
-        |> get(Routes.post_path(conn, :edit, post))
-      end
+    test "redirects to /session/new when not signed in", %{conn: conn, post: post} do
+      path = Routes.post_path(conn, :edit, post)
+      conn = get(conn, path)
+      assert redirected_to(conn) == Routes.pow_session_path(conn, :new, request_path: path)
     end
   end
 
@@ -106,8 +111,9 @@ defmodule InstagramWeb.PostControllerTest do
     test "redirects when data is valid", %{conn: conn, post: post} do
       conn = 
         conn
-        |> Pow.Plug.assign_current_user(post.user, otp_app: :instagram)
+        |> sign_in(post.user)
         |> put(Routes.post_path(conn, :update, post), post: @update_attrs)
+
       assert redirected_to(conn) == Routes.post_path(conn, :show, post)
 
       conn = get(conn, Routes.post_path(conn, :show, post))
@@ -117,8 +123,9 @@ defmodule InstagramWeb.PostControllerTest do
     test "renders errors when data is invalid", %{conn: conn, post: post} do
       conn = 
         conn
-        |> Pow.Plug.assign_current_user(post.user, otp_app: :instagram)
+        |> sign_in(post.user)
         |> put(Routes.post_path(conn, :update, post), post: @invalid_attrs)
+
       assert html_response(conn, 200) =~ "Edit Post"
     end
   end
@@ -129,8 +136,9 @@ defmodule InstagramWeb.PostControllerTest do
     test "deletes chosen post", %{conn: conn, post: post} do
       conn = 
         conn
-        |> Pow.Plug.assign_current_user(post.user, otp_app: :instagram)
+        |> sign_in(post.user)
         |> delete(Routes.post_path(conn, :delete, post))
+
       assert redirected_to(conn) == Routes.post_path(conn, :index)
       assert_error_sent 404, fn ->
         get(conn, Routes.post_path(conn, :show, post))
@@ -139,7 +147,7 @@ defmodule InstagramWeb.PostControllerTest do
   end
 
   defp create_post(_) do
-    post = fixture(:post) |> Instagram.Repo.preload(:user)
-    {:ok, post: post}
+    post = fixture(:post)
+    %{post: post}
   end
 end

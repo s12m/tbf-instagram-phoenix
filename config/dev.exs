@@ -1,22 +1,13 @@
 use Mix.Config
 
-database_url = System.get_env("DATABASE_URL")
-
 # Configure your database
-case database_url do
-  nil ->
-    config :instagram, Instagram.Repo,
-      username: "postgres",
-      password: "postgres",
-      database: "instagram_dev",
-      hostname: "localhost",
-      show_sensitive_data_on_connection_error: true,
-      pool_size: 10
-  url ->
-    config :instagram, Instagram.Repo,
-      url: url <> "instagram_dev",
-      pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
-end
+config :instagram, Instagram.Repo,
+  username: "postgres",
+  password: "postgres",
+  database: "instagram_dev",
+  hostname: "localhost",
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -25,15 +16,7 @@ end
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :instagram, InstagramWeb.Endpoint,
-  http: [
-    port: 4000,
-    protocol_options: [
-      max_header_name_length: 64,
-      max_header_value_length: 40960,
-      max_headers: 100,
-      max_request_line_length: 80960
-    ]
-  ],
+  http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
@@ -77,7 +60,7 @@ config :instagram, InstagramWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/instagram_web/{live,views}/.*(ex)$",
+      ~r"lib/instagram_web/(live|views)/.*(ex)$",
       ~r"lib/instagram_web/templates/.*(eex)$"
     ]
   ]
@@ -92,5 +75,5 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-# Configure waffle
+# Configures waffle
 config :waffle, storage: Waffle.Storage.Local

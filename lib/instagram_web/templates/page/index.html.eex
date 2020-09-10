@@ -1,4 +1,3 @@
-
 <h1>All posts</h1>
 
 <%= link "New Post", to: Routes.post_path(@conn, :new) %>

@@ -2,4 +2,4 @@
 
 <%= render "form.html", Map.merge(assigns, %{action: Routes.post_path(@conn, :update, @post), method: :put}) %>
 
-<%= link "Back", to: Routes.post_path(@conn, :index) %>
+<span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>

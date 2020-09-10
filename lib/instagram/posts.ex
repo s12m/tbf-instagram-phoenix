@@ -5,6 +5,7 @@ defmodule Instagram.Posts do
 
   import Ecto.Query, warn: false
   alias Instagram.Repo
+
   alias Instagram.Posts.Post
   alias Instagram.Users.User
 
@@ -17,7 +18,7 @@ defmodule Instagram.Posts do
       [%Post{}, ...]
 
   """
-  def list_posts() do
+  def list_posts do
     Repo.all(Post)
     |> Repo.preload(:user)
   end
@@ -44,12 +45,16 @@ defmodule Instagram.Posts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_post!(id), do: Repo.get!(Post, id)
+  def get_post!(id), do: Repo.get!(Post, id) |> Repo.preload(:user)
 
   @doc """
   Gets a single post created by the user.
   """
-  def get_post!(id, %User{} = user), do: Repo.get!(Post.filter_by_user(Post, user), id)
+  def get_post!(%User{} = user, id) do
+    Post
+    |> Post.filter_by_user(user)
+    |> Repo.get!(id)
+  end
 
   @doc """
   Creates a post.
@@ -57,13 +62,10 @@ defmodule Instagram.Posts do
   ## Examples
 
       iex> create_post(%{field: value})
-      {:ok, %{post_with_image: %Post{}}}
+      {:ok, %Post{}}
 
       iex> create_post(%{field: bad_value})
-      {:error, :post, %Ecto.Changeset{}, _}
-
-      iex> create_post(%{image: nil})
-      {:error, :post_with_image, %Ecto.Changeset{}, _}
+      {:error, %Ecto.Changeset{}}
 
   """
   def create_post(attrs \\ %{}) do
@@ -94,7 +96,7 @@ defmodule Instagram.Posts do
   end
 
   @doc """
-  Deletes a Post.
+  Deletes a post.
 
   ## Examples
 
@@ -115,10 +117,10 @@ defmodule Instagram.Posts do
   ## Examples
 
       iex> change_post(post)
-      %Ecto.Changeset{source: %Post{}}
+      %Ecto.Changeset{data: %Post{}}
 
   """
-  def change_post(%Post{} = post) do
-    Post.changeset(post, %{})
+  def change_post(%Post{} = post, attrs \\ %{}) do
+    Post.changeset(post, attrs)
   end
 end

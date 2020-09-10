@@ -1,6 +1,6 @@
-<%= @posts |> Enum.chunk_every(3) |> Enum.map(fn(posts) -> %>
+<%= @posts |> Enum.chunk_every(3) |> Enum.map(fn posts -> %>
   <div class="row">
-    <%= posts |> Enum.map(fn(post) -> %>
+    <%= Enum.map(posts, fn post -> %>
       <div class="col-4 p-1">
         <div class="card">
           <img src="<%= Instagram.PostImageUploader.url({post.image, post})%>" class="card-img-top">

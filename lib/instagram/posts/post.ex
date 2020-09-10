@@ -17,7 +17,9 @@ defmodule Instagram.Posts.Post do
   @doc """
   Returns query filtered by user.
   """
-  def filter_by_user(query, %User{id: user_id}), do: from p in query, where: p.user_id == ^user_id
+  def filter_by_user(query, %User{id: user_id}) do
+    from p in query, where: p.user_id == ^user_id
+  end
 
   @doc false
   def changeset(post, attrs) do
@@ -26,6 +28,7 @@ defmodule Instagram.Posts.Post do
     |> validate_required([:body, :user_id])
   end
 
+  @doc false
   def image_changeset(post, attrs) do
     post
     |> cast_attachments(attrs, [:image])

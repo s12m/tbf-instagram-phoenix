@@ -15,9 +15,9 @@ defmodule Instagram.PostImageUploader do
   # end
 
   # Whitelist file extensions:
-  # def validate({file, _}) do
-  #   ~w(.jpg .jpeg .gif .png) |> Enum.member?(Path.extname(file.file_name))
-  # end
+  def validate({file, _}) do
+    ~w(.jpg .jpeg .gif .png) |> Enum.member?(Path.extname(file.file_name))
+  end
 
   # Define a thumbnail transformation:
   # def transform(:thumb, _) do
@@ -30,12 +30,8 @@ defmodule Instagram.PostImageUploader do
   # end
 
   # Override the storage directory:
-  def storage_dir(_version, {_file, scope}) do
-    if Mix.env == :test do
-      "uploads/test/post/images/#{scope.id}"
-    else
-      "uploads/post/images/#{scope.id}"
-    end
+  def storage_dir(_, {_, scope}) do
+    "uploads/post/image/#{scope.id}"
   end
 
   # Provide a default URL if there hasn't been a file uploaded
