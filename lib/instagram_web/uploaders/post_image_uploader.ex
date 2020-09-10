@@ -1,9 +1,8 @@
 defmodule Instagram.PostImageUploader do
   use Waffle.Definition
-  use Waffle.Ecto.Definition
 
   # Include ecto support (requires package waffle_ecto installed):
-  # use Waffle.Ecto.Definition
+  use Waffle.Ecto.Definition
 
   @versions [:original]
 
@@ -31,7 +30,7 @@ defmodule Instagram.PostImageUploader do
   # end
 
   # Override the storage directory:
-  def storage_dir(version, {file, scope}) do
+  def storage_dir(_, {_, scope}) do
     "uploads/post/image/#{scope.id}"
   end
 

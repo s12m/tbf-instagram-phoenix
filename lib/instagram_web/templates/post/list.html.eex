@@ -1,0 +1,25 @@
+<%= @posts |> Enum.chunk_every(3) |> Enum.map(fn posts -> %>
+  <div class="row">
+    <%= Enum.map(posts, fn post -> %>
+      <div class="col-4 p-1">
+        <div class="card">
+          <img src="<%= Instagram.PostImageUploader.url({post.image, post})%>" class="card-img-top">
+          <div class="card-body">
+            <p class="card-text"><%= post.body %></p>
+            <small class="d-block">
+              Posted by
+              <%= if post.user == Pow.Plug.current_user(@conn) do %>
+                you
+                <%= link "Edit", to: Routes.post_path(@conn, :edit, post), class: "text-primary" %>
+                <%= link "Delete", to: Routes.post_path(@conn, :delete, post), class: "text-danger", method: :delete, data: [confirm: "Are you sure?"] %>
+              <% else %>
+                <%= post.user.email %>
+              <% end %>
+            </small>
+            <small class="d-block" title="<%= post.inserted_at %>"><%= post.inserted_at %></small>
+          </div>
+        </div>
+      </div>
+    <% end) %>
+  </div>
+<% end) %>

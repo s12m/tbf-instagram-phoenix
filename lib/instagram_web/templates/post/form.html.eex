@@ -5,15 +5,17 @@
     </div>
   <% end %>
 
-  <%= label f, :body %>
-  <%= textarea f, :body %>
-  <%= error_tag f, :body %>
-
-  <%= label f, :image %>
-  <%= file_input f, :image %>
-  <%= error_tag f, :image %>
-
-  <div>
-    <%= submit "Save" %>
+  <div class="form-group">
+    <%= label f, :body %>
+    <%= textarea f, :body, class: "form-control" %>
+    <%= error_tag f, :body %>
   </div>
+
+  <div class="form-group">
+    <%= label f, :image %>
+    <%= file_input f, :image, class: "form-control" %>
+    <%= error_tag f, :image %>
+  </div>
+
+  <%= submit "Save", class: "btn btn-primary" %>
 <% end %>

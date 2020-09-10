@@ -20,6 +20,7 @@ defmodule Instagram.Posts do
   """
   def list_posts do
     Repo.all(Post)
+    |> Repo.preload(:user)
   end
 
   @doc """
@@ -27,6 +28,7 @@ defmodule Instagram.Posts do
   """
   def list_posts(%User{} = user) do
     Repo.all(Post.filter_by_user(Post, user))
+    |> Repo.preload(:user)
   end
 
   @doc """
@@ -43,9 +45,9 @@ defmodule Instagram.Posts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_post!(id), do: Repo.get!(Post, id)
+  def get_post!(id), do: Repo.get!(Post, id) |> Repo.preload(:user)
 
-  @doc"""
+  @doc """
   Gets a single post created by the user.
   """
   def get_post!(%User{} = user, id) do
