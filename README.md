@@ -1,6 +1,4 @@
-# ~~技術書典8~~ 技術書典 応援祭 Phoenix版サンプルコード
-
-~~技術書典8~~ 技術書典 応援祭 で頒布した書籍「RailsエンジニアのためのElixir/Phoenix」のPhoenix版サンプルコードです。
+# 『RailsエンジニアのためのElixir/Phoenix』Phoenix版サンプルコード
 
 ## 必要なもの
 
@@ -11,8 +9,7 @@
 ## セットアップ
 
 ```
-$ mix do deps.get, ecto.setup
-$ npm install --prefix assets/
+$ mix setup
 ```
 
 ## 起動
